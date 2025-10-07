@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TENS Companion Pro - AI Medical Therapy Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-blue: #1a73e8;
+            --secondary-teal: #0097a7;
+            --light-teal: #4fb3bf;
+            --dark-blue: #0d47a1;
+            --light-bg: #f8fdff;
+            --white: #ffffff;
+            --gray-light: #f5f5f5;
+            --gray-medium: #e0e0e0;
+            --gray-dark: #757575;
+            --text-dark: #212121;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --error: #f44336;
+            --medical-green: #2e7d32;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light-bg);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+        
+        .app-container {
+            max-width: 480px;
+            margin: 0 auto;
+            background-color: var(--white);
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+            padding-bottom: 80px;
+        }
+        
+        /* Header Styles */
+        .header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-teal));
+            color: var(--white);
+            padding: 20px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo i {
+            font-size: 24px;
+        }
+        
+        .logo h1 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        
+        .user-profile img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        /* Main Content Styles */
+        .main-content {
+            padding: 20px 15px;
+        }
+        
+        .welcome-section {
+            margin-bottom: 25px;
+        }
+        
+        .welcome-section h2 {
+            font-size: 22px;
+            color: var(--dark-blue);
+            margin-bottom: 5px;
+        }
+        
+        .welcome-section p {
+            color: var(--gray-dark);
+            font-size: 14px;
+        }
+        
+        .card {
+            background-color: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary-blue);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--dark-blue);
+        }
+        
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--light-teal);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .stat-card {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: var(--gray-dark);
+        }
+        
+        /* AI Assistant Section */
+        .ai-assistant {
+            margin-top: 25px;
+        }
+        
+        .ai-card {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-teal));
+            color: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .ai-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .ai-icon {
+            font-size: 24px;
+        }
+        
+        .ai-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .ai-response {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            display: none;
+        }
+        
+        .ai-response.show {
+            display: block;
+        }
+        
+        .ai-question {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin: 5px 0;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+            transition: all 0.3s ease;
+        }
+        
+        .ai-question:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(5px);
+        }
+        
+        /* Bottom Navigator */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--white);
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 480px;
+            margin: 0 auto;
+            z-index: 100;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            color: var(--gray-dark);
+            text-decoration: none;
+            font-size: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .nav-item.active {
+            color: var(--primary-blue);
+        }
+        
+        .nav-icon {
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-heartbeat"></i>
+                <h1>TENS Companion Pro</h1>
+            </div>
+            <div class="user-profile">
+                <img src="https://i.pravatar.cc/150?img=12" alt="User Profile">
+                <span>Dr. Smith</span>
+            </div>
+        </header>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Welcome Section -->
+            <section class="welcome-section">
+                <h2>Welcome back, Dr. Smith</h2>
+                <p>Your patients are waiting for your care</p>
+            </section>
+            
+            <!-- Stats Overview -->
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-value">12</div>
+                    <div class="stat-label">Active Patients</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">8</div>
+                    <div class="stat-label">Sessions Today</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">94%</div>
+                    <div class="stat-label">Adherence Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">4.8</div>
+                    <div class="stat-label">Avg. Rating</div>
+                </div>
+            </div>
+            
+            <!-- AI Assistant Section -->
+            <section class="ai-assistant">
+                <div class="ai-card">
+                    <div class="ai-header">
+                        <i class="fas fa-robot ai-icon"></i>
+                        <div class="ai-title">AI Therapy Expert</div>
+                    </div>
+                    <p>Powered by Gemini 2.5 Pro - Medical Grade AI</p>
+                    
+                    <button class="ai-question" onclick="showAIResponse('electrodes')">
+                        How do I place electrodes for back pain?
+                    </button>
+                    
+                    <button class="ai-question" onclick="showAIResponse('settings')">
+                        What are the best settings for chronic pain?
+                    </button>
+                    
+                    <button class="ai-question" onclick="showAIResponse('safety')">
+                        Safety precautions for TENS therapy
+                    </button>
+                    
+                    <button class="ai-question" onclick="showAIResponse('frequency')">
+                        How often should I use TENS?
+                    </button>
+                    
+                    <button class="ai-question" onclick="showAIResponse('shoulder')">
+                        Optimize settings for shoulder pain
+                    </button>
+                    
+                    <div class="ai-response" id="aiResponse">
+                        <strong>AI Recommendation:</strong>
+                        <div id="responseText">Select a question above to see AI recommendations</div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Quick Actions Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Quick Actions</div>
+                    <div class="card-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                </div>
+                <p>Start a new therapy session or check patient analytics</p>
+            </div>
+        </main>
+        
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="#" class="nav-item active">
+                <i class="fas fa-home nav-icon"></i>
+                <span>Home</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-plus-circle nav-icon"></i>
+                <span>Log Session</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-robot nav-icon"></i>
+                <span>AI Assistant</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-chart-bar nav-icon"></i>
+                <span>Analytics</span>
+            </a>
+        </nav>
+    </div>
+
+    <script>
+        // AI Response System
+        function showAIResponse(type) {
+            const responseBox = document.getElementById('aiResponse');
+            const responseText = document.getElementById('responseText');
+            
+            const responses = {
+                electrodes: "For back pain, place electrodes 2-4 inches apart on either side of the pain area. Avoid placing directly on the spine. For lower back pain, position one electrode on each side of the lumbar region.",
+                settings: "Chronic pain typically responds best to: Frequency: 80-100Hz, Pulse Width: 150-200μs, Duration: 20-30 minutes. Start with lower intensity and gradually increase to comfortable level.",
+                safety: "• Never use near heart or carotid sinus • Avoid broken skin • Don't use while driving • Stop if pain increases • Keep away from water • Consult doctor if pregnant",
+                frequency: "For chronic conditions: 2-3 times daily. For acute pain: As needed, up to 4-5 times daily. Allow 1-2 hours between sessions. Maximum 2 hours total per day.",
+                shoulder: "Shoulder pain settings: Frequency: 100Hz, Pulse Width: 150μs. Place one electrode on front shoulder, one on back shoulder blade. Use for 15-20 minutes, 3 times daily."
+            };
+            
+            responseText.innerHTML = responses[type] || "AI recommendation not available.";
+            responseBox.classList.add('show');
+            
+            // Scroll to response
+            responseBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // Navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
