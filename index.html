@@ -228,6 +228,14 @@
             width: 100%;
             text-align: left;
             transition: all 0.3s ease;
+            min-height: 44px;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .ai-question:active {
+            transform: scale(0.98);
+            opacity: 0.8;
         }
         
         .ai-question:hover {
@@ -271,6 +279,8 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            min-height: 44px;
+            touch-action: manipulation;
         }
         
         .btn-primary {
@@ -315,10 +325,19 @@
             cursor: pointer;
             background: none;
             border: none;
+            min-height: 44px;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            padding: 8px 12px;
         }
         
         .nav-item.active {
             color: var(--primary-blue);
+        }
+        
+        .nav-item:active {
+            transform: scale(0.95);
+            opacity: 0.8;
         }
         
         .nav-icon {
@@ -378,23 +397,23 @@
                         </div>
                         <p>Powered by Gemini 2.5 Pro - Medical Grade AI</p>
                         
-                        <button class="ai-question" onclick="showAIResponse('electrodes')">
+                        <button class="ai-question" data-type="electrodes">
                             How do I place electrodes for back pain?
                         </button>
                         
-                        <button class="ai-question" onclick="showAIResponse('settings')">
+                        <button class="ai-question" data-type="settings">
                             What are the best settings for chronic pain?
                         </button>
                         
-                        <button class="ai-question" onclick="showAIResponse('safety')">
+                        <button class="ai-question" data-type="safety">
                             Safety precautions for TENS therapy
                         </button>
                         
-                        <button class="ai-question" onclick="showAIResponse('frequency')">
+                        <button class="ai-question" data-type="frequency">
                             How often should I use TENS?
                         </button>
                         
-                        <button class="ai-question" onclick="showAIResponse('shoulder')">
+                        <button class="ai-question" data-type="shoulder">
                             Optimize settings for shoulder pain
                         </button>
                         
@@ -492,19 +511,19 @@
         
         <!-- Bottom Navigation -->
         <nav class="bottom-nav">
-            <button class="nav-item active" onclick="showPage('homePage')">
+            <button class="nav-item active" data-page="homePage">
                 <i class="fas fa-home nav-icon"></i>
                 <span>Home</span>
             </button>
-            <button class="nav-item" onclick="showPage('logSessionPage')">
+            <button class="nav-item" data-page="logSessionPage">
                 <i class="fas fa-plus-circle nav-icon"></i>
                 <span>Log Session</span>
             </button>
-            <button class="nav-item" onclick="showPage('aiPage')">
+            <button class="nav-item" data-page="aiPage">
                 <i class="fas fa-robot nav-icon"></i>
                 <span>AI Assistant</span>
             </button>
-            <button class="nav-item" onclick="showPage('analyticsPage')">
+            <button class="nav-item" data-page="analyticsPage">
                 <i class="fas fa-chart-bar nav-icon"></i>
                 <span>Analytics</span>
             </button>
@@ -512,7 +531,51 @@
     </div>
 
     <script>
-        // Page Navigation
+        // Mobile-optimized JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+        });
+
+        function initializeApp() {
+            setupNavigation();
+            setupAIButtons();
+            console.log("TENS Companion Pro mobile version initialized!");
+        }
+
+        function setupNavigation() {
+            const navButtons = document.querySelectorAll('.nav-item');
+            
+            navButtons.forEach(button => {
+                button.addEventListener('click', handleNavClick);
+                button.addEventListener('touchend', handleNavClick);
+            });
+        }
+
+        function setupAIButtons() {
+            const aiButtons = document.querySelectorAll('.ai-question');
+            
+            aiButtons.forEach(button => {
+                button.addEventListener('click', handleAIClick);
+                button.addEventListener('touchend', handleAIClick);
+            });
+        }
+
+        function handleNavClick(e) {
+            e.preventDefault();
+            const pageId = this.getAttribute('data-page');
+            if (pageId) {
+                showPage(pageId);
+            }
+        }
+
+        function handleAIClick(e) {
+            e.preventDefault();
+            const type = this.getAttribute('data-type');
+            if (type) {
+                showAIResponse(type);
+            }
+        }
+
         function showPage(pageId) {
             // Hide all pages
             document.querySelectorAll('.page').forEach(page => {
@@ -526,10 +589,15 @@
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.classList.remove('active');
             });
-            event.target.classList.add('active');
+            
+            // Activate current nav button
+            document.querySelectorAll('.nav-item').forEach(button => {
+                if (button.getAttribute('data-page') === pageId) {
+                    button.classList.add('active');
+                }
+            });
         }
 
-        // AI Response System
         function showAIResponse(type) {
             const responseBox = document.getElementById('aiResponse');
             const responseText = document.getElementById('responseText');
@@ -544,10 +612,10 @@
             
             responseText.innerHTML = responses[type] || "AI recommendation not available.";
             responseBox.classList.add('show');
-            
-            // Scroll to response
             responseBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
+
+        window.addEventListener('load', initializeApp);
     </script>
 </body>
 </html>
