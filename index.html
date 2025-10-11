@@ -6,160 +6,101 @@ const TENSCompanionPro = () => {
 
   // Simulate AI assistant response
   const askAI = () => {
-    // For demonstration, provide a static response
     if (question.trim().length === 0) {
       setAnswer("Please enter a question to ask the AI Assistant.");
       return;
     }
-
     // Here you could integrate with a real AI backend API
-    setAnswer(
-      `This is a sample answer for your question: "${question.trim()}".`
-    );
+    setAnswer(`This is a sample answer for your question: "${question.trim()}"`);
   };
 
+  // Navigation items for bottom navigation
+  const navItems = [
+    { label: "Home", icon: "🏠" },
+    { label: "Log Session", icon: "+" },
+    { label: "AI Assistant", icon: "🤖", active: true },
+    { label: "Analytics", icon: "📊" },
+  ];
+
   return (
-    <div
-      style={{
-        fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-        maxWidth: 400,
-        margin: "30px auto",
-        border: "1px solid #ccc",
-        borderRadius: 10,
-        overflow: "hidden",
-        boxShadow: "0 0 10px rgba(0,0,0,0.1)",
-        backgroundColor: "#f9faff",
-      }}
-    >
+    <div style={{ maxWidth: 400, margin: "0 auto", fontFamily: "Arial, sans-serif" }}>
       {/* Header */}
-      <header
-        style={{
-          background:
-            "linear-gradient(90deg, #007bff 0%, #00aaff 100%)",
-          color: "white",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "10px 15px",
-        }}
-      >
-        <div style={{ fontWeight: "bold", fontSize: 18 }}>
-          TENS Companion Pro
-        </div>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-            fontSize: 14,
-            fontWeight: "600",
-            backgroundColor: "#0d6efd",
-            padding: "5px 10px",
-            borderRadius: 20,
-            cursor: "default",
-          }}
-          title="Logged in user"
-        >
+      <header style={{ backgroundColor: "#0066FF", color: "white", padding: "12px 16px", borderRadius: "6px 6px 0 0", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div style={{ fontWeight: "bold", fontSize: 18 }}>TENS Companion Pro</div>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <img
-            src="https://randomuser.me/api/portraits/men/75.jpg"
+            src="https://randomuser.me/api/portraits/men/44.jpg"
             alt="Dr. Smith"
-            style={{
-              width: 28,
-              height: 28,
-              borderRadius: "50%",
-              objectFit: "cover",
-            }}
+            style={{ width: 32, height: 32, borderRadius: "50%" }}
           />
-          Dr. Smith
+          <span>Dr. Smith</span>
         </div>
       </header>
 
       {/* AI Therapy Expert Card */}
       <section
         style={{
-          background: "linear-gradient(180deg, #1e88e5 0%, #1976d2 100%)",
+          backgroundColor: "#007AFF",
           color: "white",
+          borderRadius: 12,
           padding: 20,
-          borderRadius: "0 0 10px 10px",
-          display: "flex",
-          flexDirection: "column",
-          gap: 15,
+          marginTop: 20,
+          boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
         }}
       >
-        <div
-          style={{
-            fontWeight: "700",
-            fontSize: 18,
-            display: "flex",
-            alignItems: "center",
-            gap: 10,
-          }}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="22"
-            height="22"
-            fill="white"
-            viewBox="0 0 24 24"
-          >
-            <path d="M12 2a7 7 0 0 0-7 7c0 3.866 7 13 7 13s7-9.134 7-13a7 7 0 0 0-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z" />
-          </svg>
+        <h2 style={{ marginTop: 0, marginBottom: 8, display: "flex", alignItems: "center", gap: 8 }}>
+          <span role="img" aria-label="robot" style={{ fontSize: 24 }}>
+            🤖
+          </span>
           AI Therapy Expert
-        </div>
-        <div style={{ fontSize: 14, lineHeight: 1.4 }}>
+        </h2>
+        <p style={{ marginTop: 0, marginBottom: 12 }}>
           Ask me anything about TENS therapy and pain management
-        </div>
+        </p>
         <input
           type="text"
-          placeholder="Type your question here..."
+          placeholder="Type your question here"
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") askAI();
+          }}
           style={{
             width: "100%",
             padding: "10px 12px",
             borderRadius: 6,
-            border: "1.5px solid #005bbb",
+            border: "1.5px solid #005BBB",
             fontSize: 16,
             outline: "none",
-          }}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              askAI();
-            }
+            marginBottom: 12,
+            boxSizing: "border-box",
           }}
         />
         <button
           onClick={askAI}
           style={{
-            backgroundColor: "#005bbb",
+            width: "100%",
+            backgroundColor: "#005BBB",
             color: "white",
+            padding: "10px 0",
             border: "none",
             borderRadius: 6,
-            padding: "12px",
-            fontWeight: "600",
-            cursor: "pointer",
             fontSize: 16,
-            transition: "background-color 0.3s ease",
+            cursor: "pointer",
           }}
-          onMouseEnter={(e) =>
-            (e.currentTarget.style.backgroundColor = "#004494")
-          }
-          onMouseLeave={(e) =>
-            (e.currentTarget.style.backgroundColor = "#005bbb")
-          }
         >
           Ask AI Assistant
         </button>
+
         {answer && (
           <div
             style={{
-              backgroundColor: "rgba(255,255,255,0.3)",
+              marginTop: 16,
+              backgroundColor: "rgba(255,255,255,0.2)",
               borderRadius: 8,
               padding: 12,
               fontSize: 14,
-              fontWeight: "500",
-              marginTop: 10,
-              color: "#e0e0e0",
+              lineHeight: 1.4,
             }}
           >
             <strong>AI Response:</strong> {answer}
@@ -170,94 +111,41 @@ const TENSCompanionPro = () => {
       {/* Bottom Navigation */}
       <nav
         style={{
+          position: "fixed",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          backgroundColor: "white",
+          borderTop: "1px solid #ddd",
           display: "flex",
           justifyContent: "space-around",
-          padding: "12px 0",
-          borderTop: "1px solid #ddd",
-          backgroundColor: "white",
+          padding: "8px 0",
+          fontSize: 24,
+          boxShadow: "0 -2px 8px rgba(0,0,0,0.1)",
         }}
       >
-        {[
-          { label: "Home", icon: HomeIcon },
-          { label: "Log Session", icon: PlusIcon },
-          { label: "AI Assistant", icon: RobotIcon, active: true },
-          { label: "Analytics", icon: ChartIcon },
-        ].map(({ label, icon: Icon, active }) => (
-          <button
+        {navItems.map(({ label, icon, active }) => (
+          <div
             key={label}
             style={{
-              border: "none",
-              background: "none",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              fontSize: 12,
-              color: active ? "#005bbb" : "#555",
+              color: active ? "#005BBB" : "#666",
+              fontWeight: active ? "600" : "400",
+              fontSize: 14,
               cursor: "pointer",
+              userSelect: "none",
             }}
-            aria-current={active ? "page" : undefined}
             title={label}
           >
-            <Icon active={active} />
+            <span style={{ fontSize: 24 }}>{icon}</span>
             {label}
-          </button>
+          </div>
         ))}
       </nav>
     </div>
   );
 };
-
-// Icons as React components for navigation
-const HomeIcon = ({ active }) => (
-  <svg
-    fill={active ? "#005bbb" : "#555"}
-    xmlns="http://www.w3.org/2000/svg"
-    width="20"
-    height="20"
-    viewBox="0 0 24 24"
-    aria-hidden="true"
-  >
-    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
-  </svg>
-);
-
-const PlusIcon = ({ active }) => (
-  <svg
-    fill={active ? "#005bbb" : "#555"}
-    xmlns="http://www.w3.org/2000/svg"
-    width="20"
-    height="20"
-    viewBox="0 0 24 24"
-    aria-hidden="true"
-  >
-    <path d="M19 11h-6V5h-2v6H5v2h6v6h2v-6h6z" />
-  </svg>
-);
-
-const RobotIcon = ({ active }) => (
-  <svg
-    fill={active ? "#005bbb" : "#555"}
-    xmlns="http://www.w3.org/2000/svg"
-    width="20"
-    height="20"
-    viewBox="0 0 24 24"
-    aria-hidden="true"
-  >
-    <path d="M12 2a7 7 0 0 0-7 7v3h2v-3a5 5 0 0 1 10 0v3h2v-3a7 7 0 0 0-7-7zm-3 12h6v2h-6zM7 18h10v2H7z" />
-  </svg>
-);
-
-const ChartIcon = ({ active }) => (
-  <svg
-    fill={active ? "#005bbb" : "#555"}
-    xmlns="http://www.w3.org/2000/svg"
-    width="20"
-    height="20"
-    viewBox="0 0 24 24"
-    aria-hidden="true"
-  >
-    <path d="M3 17h3v-7H3v7zm5 0h3v-4H8v4zm5 0h3v-10h-3v10zm5 0h3v-1h-3v1z" />
-  </svg>
-);
 
 export default TENSCompanionPro;
