@@ -1,101 +1,63 @@
 import React, { useState } from "react";
+import "./App.css"; // Optional: for global styles
 
-// Icon components
-const HomeIcon = ({ active }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill={active ? "#005BBB" : "#999"} viewBox="0 0 24 24" width="24" height="24">
-    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
-  </svg>
-);
-
-const PlusIcon = ({ active }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill={active ? "#005BBB" : "#999"} viewBox="0 0 24 24" width="24" height="24">
-    <path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
-  </svg>
-);
-
-const RobotIcon = ({ active }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill={active ? "#005BBB" : "#999"} viewBox="0 0 24 24" width="24" height="24">
-    <path d="M12 2C10.89 2 10 2.89 10 4S10.89 6 12 6 14 5.11 14 4 13.11 2 12 2ZM7 8V15H17V8H7ZM7 6H17C18.1 6 19 6.9 19 8V15C19 16.1 18.1 17 17 17H7C5.9 17 5 16.1 5 15V8C5 6.9 5.9 6 7 6ZM10 19V21H14V19H10Z" />
-  </svg>
-);
-
-const ChartIcon = ({ active }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill={active ? "#005BBB" : "#999"} viewBox="0 0 24 24" width="24" height="24">
-    <path d="M3 17H7V21H3V17ZM10 10H14V21H10V10ZM17 3H21V21H17V3Z" />
-  </svg>
-);
-
-// Navigation items
-const navItems = [
-  { label: "Home", icon: HomeIcon },
-  { label: "Log Session", icon: PlusIcon },
-  { label: "AI Assistant", icon: RobotIcon },
-  { label: "Analytics", icon: ChartIcon },
-];
-
-const TENSCompanionPro = () => {
+function App() {
+  const [activeTab, setActiveTab] = useState("AI Expert");
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
-  const [askAI, setAskAI] = useState(false);
-  const [activeTab, setActiveTab] = useState("AI Assistant");
+
+  const navItems = ["Home", "Log Session", "AI Expert", "History", "Analytics"];
 
   const askAIHandler = () => {
-    if (question.trim().length === 0) {
-      setAnswer("Please enter a question to ask the AI Assistant.");
+    if (!question.trim()) {
+      setAnswer("Please enter a question.");
       return;
     }
-    setAnswer(`This is a sample answer for your question: "${question.trim()}"`);
-    setAskAI(true);
+    setAnswer(`This is a simulated answer for: "${question.trim()}"`);
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: "20px auto", fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", paddingBottom: 80 }}>
+    <div style={{ maxWidth: 400, margin: "20px auto", fontFamily: "Segoe UI, sans-serif", paddingBottom: 80 }}>
       {/* Header */}
       <header style={{
         background: "linear-gradient(90deg, #005BBB 0%, #0077FF 100%)",
         color: "white",
         padding: "12px 20px",
-        borderRadius: "8px",
+        borderRadius: 8,
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
         marginBottom: 20,
       }}>
         <div style={{ fontWeight: "bold", fontSize: 20 }}>TENS Companion Pro</div>
-        <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 14 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Dr. Smith" style={{ width: 36, height: 36, borderRadius: "50%", border: "2px solid white" }} />
           <span>Dr. Smith</span>
         </div>
       </header>
 
-      {/* AI Therapy Expert Card */}
-      {activeTab === "AI Assistant" && (
+      {/* AI Expert Card */}
+      {activeTab === "AI Expert" && (
         <section style={{
           backgroundColor: "#0077FF",
           borderRadius: 12,
           padding: 20,
           color: "white",
           boxShadow: "0 4px 8px rgba(0, 87, 204, 0.25)",
-          marginBottom: 20,
         }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12, fontWeight: "600", fontSize: 18 }}>
-            <RobotIcon active={true} />
-            <span>AI Therapy Expert</span>
-          </div>
-          <p style={{ marginBottom: 12, fontSize: 14 }}>Ask me anything about TENS therapy and pain management</p>
+          <div style={{ fontWeight: "600", fontSize: 18, marginBottom: 12 }}>🤖 AI Therapy Expert</div>
+          <p style={{ fontSize: 14, marginBottom: 12 }}>Ask me anything about TENS therapy and pain management</p>
           <input
             type="text"
-            placeholder="Type your question here..."
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && askAIHandler()}
+            placeholder="Type your question..."
             style={{
               width: "100%",
               padding: "10px 12px",
               borderRadius: 6,
               border: "1.5px solid #005BBB",
               fontSize: 16,
-              outline: "none",
               marginBottom: 12,
               boxSizing: "border-box",
             }}
@@ -112,20 +74,17 @@ const TENSCompanionPro = () => {
               fontSize: 16,
               cursor: "pointer",
             }}
-            aria-label="Ask AI Assistant"
           >
             Ask AI Assistant
           </button>
-
-          {askAI && (
+          {answer && (
             <div style={{
               marginTop: 16,
               backgroundColor: "rgba(255, 255, 255, 0.15)",
               padding: 12,
               borderRadius: 8,
               fontSize: 14,
-              lineHeight: 1.4,
-            }} aria-live="polite">
+            }}>
               <strong>AI Response:</strong> {answer}
             </div>
           )}
@@ -145,8 +104,8 @@ const TENSCompanionPro = () => {
         justifyContent: "space-around",
         alignItems: "center",
         boxShadow: "0 -2px 8px rgba(0,0,0,0.1)",
-      }} role="navigation" aria-label="Bottom navigation">
-        {navItems.map(({ label, icon: Icon }) => (
+      }}>
+        {navItems.map((label) => (
           <button
             key={label}
             onClick={() => setActiveTab(label)}
@@ -160,20 +119,24 @@ const TENSCompanionPro = () => {
               fontSize: 12,
               color: activeTab === label ? "#005BBB" : "#666",
               cursor: "pointer",
-              padding: 0,
-              gap: 4,
               width: 72,
+              gap: 4,
             }}
-            aria-current={activeTab === label ? "page" : undefined}
-            aria-label={label}
           >
-            <Icon active={activeTab === label} />
+            <span style={{ fontSize: 20 }}>
+              {label === "Home" && "🏠"}
+              {label === "Log Session" && "➕"}
+              {label === "AI Expert" && "🤖"}
+              {label === "History" && "📜"}
+              {label === "Analytics" && "📊"}
+            </span>
             {label}
           </button>
         ))}
       </nav>
     </div>
   );
-};
+}
 
-export default TENSCompanionPro;
+export default App;
+
